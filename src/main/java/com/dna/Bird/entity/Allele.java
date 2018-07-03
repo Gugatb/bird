@@ -67,7 +67,7 @@ public class Allele {
 	}
 	
 	/**
-	 * Definir o lado direito.
+	 * Definir o lado esquerdo.
 	 * @author Gugatb
 	 * @date 01/07/2018
 	 * @param pLeft o lado direito
@@ -93,6 +93,6 @@ public class Allele {
 	 * @param pRight o lado direito
 	 */
 	public void setRight(int pRight) {
-		
+		this.right = pRight;
 	}
 }

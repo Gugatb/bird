@@ -2,8 +2,10 @@ package com.dna.Bird.ui;
 
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import com.dna.Bird.constant.AlleleName;
 import com.dna.Bird.entity.Item;
@@ -27,8 +29,9 @@ public class Table extends JTable {
 	 */
 	public Table(Object[] pColumnNames, String[][] pRowData) {
 		super(pRowData, pColumnNames);
+		setAlignment();
 		setAutoCreateRowSorter(true);
-		setCellSelectionEnabled(true);
+//		setCellSelectionEnabled(true);
 //		setRowSelectionAllowed(true);
 	}
 	
@@ -41,7 +44,7 @@ public class Table extends JTable {
 	 */
 	public String[][] getRows(List<Item> pItems) {
 		AlleleName[] names = AlleleName.values();
-		String[][] rows = new String[pItems.size()][names.length];
+		String[][] rows = new String[pItems.size()][names.length + 1];
 		
 		for (int index = 0; index < pItems.size(); index++) {
 			rows[index][0] = pItems.get(index).getName();
@@ -70,5 +73,19 @@ public class Table extends JTable {
 		panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		return panel;
+	}
+	
+	/**
+	 * Definir o alinhamento.
+	 * @author Gugatb
+	 * @date 03/07/2018
+	 */
+	public void setAlignment() {
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		
+		for (int index = 0; index < AlleleName.values().length; index++) {
+			getColumnModel().getColumn(index + 1).setCellRenderer(centerRenderer);
+		}
 	}
 }

@@ -12,8 +12,7 @@ import com.dna.Bird.entity.Item;
 public class Window extends JFrame {
 	private static final long serialVersionUID = -2908442023007904391L;
 	
-//	private Menu menu;
-	
+	private Menu menu;
 	private StatusBar statusBar;
 //	private ToolBar toolBar;
 	
@@ -30,10 +29,10 @@ public class Window extends JFrame {
 		setStatusBar();
 //		setToolBar();
 //		
-//		menu = new Menu(this);
+		menu = new Menu(this);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		this.setJMenuBar(menu);
+		this.setJMenuBar(menu);
 		this.setSize(1024, 800);
 		this.setVisible(true);
 	}
