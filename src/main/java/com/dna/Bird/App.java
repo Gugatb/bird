@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
@@ -20,17 +21,25 @@ public class App {
 		try {
 			window = new Window("DNA");
 			
+			File yourFile = new File("data.ini");
+			yourFile.createNewFile();
+			
 			Ini ini = new Ini();
 			File file = new File("data.ini");
 			ini.load(new FileReader(file));
 			
-			Ini.Section section = ini.get("Nome");
-			Map<String, String> map = ini.get("Nome");
+			Set<String> sectionNames = ini.keySet();
+			ini.put("Teste", "param", "Teste");
 			
-			ini.put("Nome", "param", "Teste");
-			
-			for (Entry<String, String> entry : map.entrySet()) {
-				System.err.println(entry.getKey() + " = " + entry.getValue());
+			for (String name : sectionNames) {
+//				Ini.Section section = ini.get(name);
+				Map<String, String> map = ini.get(name);
+				
+//				ini.put(name, "param", "Teste");
+				
+				for (Entry<String, String> entry : map.entrySet()) {
+					System.err.println(entry.getKey() + " = " + entry.getValue());
+				}
 			}
 		}
 		catch (InvalidFileFormatException e) {

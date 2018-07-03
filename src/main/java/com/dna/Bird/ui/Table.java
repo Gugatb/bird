@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import com.dna.Bird.constant.ColumnName;
+import com.dna.Bird.constant.AlleleName;
 import com.dna.Bird.entity.Item;
 
 public class Table extends JTable {
@@ -40,18 +40,20 @@ public class Table extends JTable {
 	 * @return rows as linhas
 	 */
 	public String[][] getRows(List<Item> pItems) {
-		Object[] names = ColumnName.BASIC.getValue();
+		AlleleName[] names = AlleleName.values();
 		String[][] rows = new String[pItems.size()][names.length];
 		
 		for (int index = 0; index < pItems.size(); index++) {
 			rows[index][0] = pItems.get(index).getName();
+			int index2 = 0;
 			
-			for (int index2 = 0; index2 < names.length; index2++) {
+			for (AlleleName name : names) {
 				String content = "";
-				content += pItems.get(index).getAlleles().get(index2).getLeftText();
+				content += pItems.get(index).getAlleles().get(name.getValue()).getLeftText();
 				content += !content.isEmpty() ? " - " : "";
-				content += pItems.get(index).getAlleles().get(index2).getRightText();
+				content += pItems.get(index).getAlleles().get(name.getValue()).getRightText();
 				rows[index][index2 + 1] = content;
+				index2++;
 			}
 		}
 		return rows;

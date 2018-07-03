@@ -1,12 +1,12 @@
 package com.dna.Bird.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.dna.Bird.constant.AlleleName;
 
 public class Item {
-	private List<Allele> alleles;
+	private Map<String, Allele> alleles;
 	private String name;
 	
 	/**
@@ -15,7 +15,7 @@ public class Item {
 	 * @date 01/07/2018
 	 */
 	public Item() {
-		this.alleles = new ArrayList<Allele>();
+		this.alleles = new HashMap<String, Allele>();
 		this.name = "";
 		
 		// Instânciar os alelos.
@@ -23,7 +23,7 @@ public class Item {
 			String name = AlleleName.values()[index].getValue();
 			Allele allele = new Allele();
 			allele.setName(name);
-			alleles.add(allele);
+			alleles.put(name, allele);
 		}
 	}
 	
@@ -33,7 +33,7 @@ public class Item {
 	 * @date 01/07/2018
 	 * @return alleles os alelos
 	 */
-	public List<Allele> getAlleles() {
+	public Map<String, Allele> getAlleles() {
 		return alleles;
 	}
 	
@@ -53,8 +53,25 @@ public class Item {
 	 * @date 01/07/2018
 	 * @param pAlleles os alelos
 	 */
-	public void setAlleles(List<Allele> pAlleles) {
+	public void setAlleles(Map<String, Allele> pAlleles) {
 		this.alleles = pAlleles;
+	}
+	
+	/**
+	 * Definir o mapa.
+	 * @author Gugatb
+	 * @date 01/07/2018
+	 * @param pMap o mapa
+	 */
+	public void setMap(Map<String, String> pMap) {
+		for (int index = 0; index < AlleleName.values().length; index++) {
+			String name = AlleleName.values()[index].getValue();
+			
+			
+			Allele allele = new Allele();
+			allele.setName(name);
+			alleles.put(name, allele);
+		}
 	}
 	
 	/**
