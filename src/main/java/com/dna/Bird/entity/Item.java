@@ -1,5 +1,6 @@
 package com.dna.Bird.entity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import com.dna.Bird.constant.AlleleName;
 
 public class Item {
 	private Map<String, Allele> alleles;
+	private Date date;
 	private String name;
 	
 	/**
@@ -16,6 +18,7 @@ public class Item {
 	 */
 	public Item() {
 		this.alleles = new HashMap<String, Allele>();
+		this.date = new Date();
 		this.name = "";
 		
 		// Instânciar os alelos.
@@ -35,6 +38,16 @@ public class Item {
 	 */
 	public Map<String, Allele> getAlleles() {
 		return alleles;
+	}
+	
+	/**
+	 * Obter a data.
+	 * @author Gugatb
+	 * @date 08/07/2018
+	 * @return date a data
+	 */
+	public Date getDate() {
+		return date;
 	}
 	
 	/**
@@ -80,6 +93,16 @@ public class Item {
 	 */
 	public void setAlleles(Map<String, Allele> pAlleles) {
 		this.alleles = pAlleles;
+	}
+	
+	/**
+	 * Definir a data.
+	 * @author Gugatb
+	 * @date 08/07/2018
+	 * @param pDate a data
+	 */
+	public void setDate(Date pDate) {
+		this.date = pDate;
 	}
 	
 	/**

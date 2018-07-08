@@ -1,5 +1,6 @@
 package com.dna.Bird.ui;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -8,6 +9,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import com.dna.Bird.constant.AlleleName;
+import com.dna.Bird.constant.Api;
 import com.dna.Bird.entity.Item;
 
 public class Table extends JTable {
@@ -43,18 +45,22 @@ public class Table extends JTable {
 	 * @return rows as linhas
 	 */
 	public String[][] getRows(List<Item> pItems) {
+		SimpleDateFormat formater = new SimpleDateFormat(Api.DATE_FORMAT.getValue());
 		AlleleName[] names = AlleleName.values();
-		String[][] rows = new String[pItems.size()][names.length + 1];
+		String[][] rows = new String[pItems.size()][names.length + 2];
 		
 		for (int index = 0; index < pItems.size(); index++) {
+			rows[index][names.length + 1] = formater.format(pItems.get(index).getDate());
 			rows[index][0] = pItems.get(index).getName();
 			int index2 = 0;
 			
 			for (AlleleName name : names) {
 				String content = "";
-				content += pItems.get(index).getAlleles().get(name.getValue()).getLeftText();
-				content += !content.isEmpty() ? " - " : "";
-				content += pItems.get(index).getAlleles().get(name.getValue()).getRightText();
+				String leftText = pItems.get(index).getAlleles().get(name.getValue()).getLeftText();
+				String rightText = pItems.get(index).getAlleles().get(name.getValue()).getRightText();
+				content += leftText;
+				content += !leftText.isEmpty() && !rightText.isEmpty() ? " - " : "";
+				content += rightText;
 				rows[index][index2 + 1] = content;
 				index2++;
 			}
@@ -73,6 +79,11 @@ public class Table extends JTable {
 		panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		return panel;
+	}
+	
+	@Override
+	public boolean isCellEditable(int pRow, int pCol) {
+		return false;
 	}
 	
 	/**

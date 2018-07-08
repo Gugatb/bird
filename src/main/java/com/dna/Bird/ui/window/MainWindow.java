@@ -1,6 +1,8 @@
-package com.dna.Bird.ui;
+package com.dna.Bird.ui.window;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -8,13 +10,15 @@ import javax.swing.JScrollPane;
 
 import com.dna.Bird.constant.ColumnName;
 import com.dna.Bird.entity.Item;
+import com.dna.Bird.ui.Menu;
+import com.dna.Bird.ui.StatusBar;
+import com.dna.Bird.ui.Table;
 
-public class Window extends JFrame {
+public class MainWindow extends JFrame {
 	private static final long serialVersionUID = -2908442023007904391L;
 	
 	private Menu menu;
 	private StatusBar statusBar;
-//	private ToolBar toolBar;
 	
 	private Table table;
 	
@@ -24,17 +28,18 @@ public class Window extends JFrame {
 	 * @date 01/07/2018
 	 * @param pTitle o título
 	 */
-	public Window(String pTitle) {
+	public MainWindow(String pTitle) {
 		super(pTitle);
 		setStatusBar();
-//		setToolBar();
-//		
+		
 		menu = new Menu(this);
+		menu.setTableItems(this);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setJMenuBar(menu);
 		this.setSize(1024, 800);
 		this.setVisible(true);
+		this.setLocationRelativeTo(null);
 	}
 	
 	/**
@@ -45,6 +50,16 @@ public class Window extends JFrame {
 	 */
 	public StatusBar getStatusBar() {
 		return statusBar;
+	}
+	
+	/**
+	 * Obter a tabela.
+	 * @author Gugatb
+	 * @date 07/07/2018
+	 * @return table a tabela
+	 */
+	public Table getTable() {
+		return table;
 	}
 	
 	/**
@@ -77,7 +92,6 @@ public class Window extends JFrame {
 	private void setTable(JScrollPane pPanel) {
 		getContentPane().add(pPanel, BorderLayout.CENTER);
 		setStatusBar();
-//		setToolBar();
 		revalidate();
 		repaint();
 	}
@@ -91,10 +105,20 @@ public class Window extends JFrame {
 	public void setTableItems(List<Item> pItems) {
 		removeTable();
 		
+		// Definir a tabela.
 		table = new Table(
 			ColumnName.BASIC.getValue(),
 			new Table().getRows(pItems)
 		);
+		
+		// Definir o ouvinte de duplo click na tabela.
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent pEvent) {
+				if (pEvent.getClickCount() == 2) {
+					menu.edit(MainWindow.this);
+				}
+			}
+		});
 		
 		setTable(table.getScrollPanel());
 	}

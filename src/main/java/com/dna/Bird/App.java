@@ -15,62 +15,20 @@ import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
 import com.dna.Bird.entity.Item;
-import com.dna.Bird.ui.Window;
+import com.dna.Bird.ui.window.MainWindow;
 
 @SuppressWarnings("unused")
 public class App {
-	private static Window window;
+	private static MainWindow window;
 	
-	public static void main(String[] args) {
-		try {
-			List<Item> items = new ArrayList<Item>();
-			File f = new File("data.ini");
-			f.createNewFile();
-//			f.delete();
-			
-			Ini iniR = new Ini();
-			iniR.load(new FileReader("data.ini"));
-			
-			Wini iniW = new Wini(new File("data.ini"));
-			
-			Item item = new Item();
-//			for (Entry<String, String> entry : item.getMap().entrySet()) {
-//				iniW.put("Teste", entry.getKey(), entry.getValue());
-//			}
-//			iniW.store();
-			
-			Set<String> sectionNames = iniR.keySet();
-//			ini.put("Teste2", "param", "Teste");
-//			ini.put("Secao", "Oa2L", "6");
-			
-			for (String name : sectionNames) {
-//				Ini.Section section = ini.get(name);
-				Map<String, String> map = iniR.get(name);
-				
-//				ini.put(name, "param", "Teste");
-				
-				item = new Item();
-				item.setName(name);
-				item.setMap(map);
-				items.add(item);
-				
-				for (Entry<String, String> entry : map.entrySet()) {
-					System.err.println(entry.getKey() + " = " + entry.getValue());
-				}
-			}
-			
-			window = new Window("Pássaros");
-			window.setTableItems(items);
-		}
-		catch (InvalidFileFormatException exception) {
-			exception.printStackTrace();
-		}
-		catch (FileNotFoundException exception) {
-			exception.printStackTrace();
-		}
-		catch (IOException exception) {
-			exception.printStackTrace();
-		}
+	/**
+	 * Construtor da classe.
+	 * @author Gugatb
+	 * @date 01/07/2018
+	 * @param pArguments os argumentos
+	 */
+	public static void main(String[] pArguments) {
+		window = new MainWindow("Pássaros");
 	}
 }
 

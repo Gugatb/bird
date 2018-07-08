@@ -17,7 +17,8 @@ public enum ColumnName {
 		AlleleName.UN_21.getValue(),
 		AlleleName.UN_30.getValue(),
 		AlleleName.UN_34.getValue(),
-		AlleleName.UN_38.getValue()
+		AlleleName.UN_38.getValue(),
+		"Data"
 	});
 	
 	// Valor padrão.
