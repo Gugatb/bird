@@ -10,6 +10,7 @@ public class Item {
 	private Map<String, Allele> alleles;
 	private Date date;
 	private String name;
+	private Integer similarity;
 	
 	/**
 	 * Construtor da classe.
@@ -20,6 +21,7 @@ public class Item {
 		this.alleles = new HashMap<String, Allele>();
 		this.date = new Date();
 		this.name = "";
+		this.similarity = 0;
 		
 		// Instânciar os alelos.
 		for (AlleleName alleleName : AlleleName.values()) {
@@ -59,8 +61,8 @@ public class Item {
 	public Map<String, String> getMap() {
 		Map<String, String> map = new HashMap<String, String>();
 		
-		for (int index = 0; index < AlleleName.values().length; index++) {
-			String name = AlleleName.values()[index].getValue();
+		for (AlleleName alleleName : AlleleName.values()) {
+			String name = alleleName.getValue();
 			
 			if (alleles.containsKey(name)) {
 				Allele allele = alleles.get(name);
@@ -83,6 +85,16 @@ public class Item {
 	 */
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * Obter a similaridade.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @return similarity a similaridade
+	 */
+	public Integer getSimilarity() {
+		return similarity;
 	}
 	
 	/**
@@ -142,5 +154,15 @@ public class Item {
 	 */
 	public void setName(String pName) {
 		this.name = pName;
+	}
+	
+	/**
+	 * Definir a similaridade.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @param pSimilarity a similaridade
+	 */
+	public void setSimilarity(Integer pSimilarity) {
+		this.similarity = pSimilarity;
 	}
 }

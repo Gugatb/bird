@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.dna.Bird.constant.AlleleName;
+import com.dna.Bird.entity.Item;
 
 public class AllelesWindow extends JFrame {
 	private static final long serialVersionUID = -775669992576108222L;
@@ -57,6 +58,28 @@ public class AllelesWindow extends JFrame {
 	 */
 	public Map<String, JTextField> getFields() {
 		return fields;
+	}
+	
+	/**
+	 * Obter o item
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @return item o item
+	 */
+	public Item getItem() {
+		Map<String, String> map = new HashMap<String, String>();
+		Item item = new Item();
+		
+		// Definir os alelos.
+		for (AlleleName alleName : AlleleName.values()) {
+			String name = alleName.getValue();
+			
+			map.put(name + "L", getField(name + "L").getText());
+			map.put(name + "R", getField(name + "R").getText());
+		}
+		
+		item.setMap(map);
+		return item;
 	}
 	
 	/**
@@ -117,5 +140,21 @@ public class AllelesWindow extends JFrame {
 		button = new JButton("");
 		button.setBounds(165, 380, 100, 20);
 		add(button);
+	}
+	
+	/**
+	 * Definir o item.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @param pItem o item
+	 */
+	public void setItem(Item pItem) {
+		// Definir os campos de alelos.
+		for (AlleleName alleName : AlleleName.values()) {
+			String name = alleName.getValue();
+			
+			fields.get(name + "L").setText(pItem.getMap().get(name + "L"));
+			fields.get(name + "R").setText(pItem.getMap().get(name + "R"));
+		}
 	}
 }

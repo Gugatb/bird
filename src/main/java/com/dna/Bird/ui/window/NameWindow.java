@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class AlleleWindow extends JFrame {
+public class NameWindow extends JFrame {
 	private static final long serialVersionUID = -775669992576108222L;
 	
 	private JButton button;
@@ -19,10 +19,10 @@ public class AlleleWindow extends JFrame {
 	/**
 	 * Construtor da classe.
 	 * @author Gugatb
-	 * @date 07/07/2018
+	 * @date 09/07/2018
 	 * @param pTitle o título
 	 */
-	public AlleleWindow(String pTitle) {
+	public NameWindow(String pTitle) {
 		super(pTitle);
 		
 		fields = new HashMap<String, JTextField>();
@@ -39,7 +39,7 @@ public class AlleleWindow extends JFrame {
 	/**
 	 * Obter o campo.
 	 * @author Gugatb
-	 * @date 07/07/2018
+	 * @date 09/07/2018
 	 * @param pName o nome
 	 * @return field o campo
 	 */
@@ -50,7 +50,7 @@ public class AlleleWindow extends JFrame {
 	/**
 	 * Obter os campos.
 	 * @author Gugatb
-	 * @date 07/07/2018
+	 * @date 09/07/2018
 	 * @return fields os campos
 	 */
 	public Map<String, JTextField> getFields() {
@@ -60,7 +60,7 @@ public class AlleleWindow extends JFrame {
 	/**
 	 * Definir o botão.
 	 * @author Gugatb
-	 * @date 07/07/2018
+	 * @date 09/07/2018
 	 * @param pListener o ouvinte
 	 * @param pText o texto
 	 */
@@ -72,17 +72,17 @@ public class AlleleWindow extends JFrame {
 	/**
 	 * Definir o formulário.
 	 * @author Gugatb
-	 * @date 07/07/2018
+	 * @date 09/07/2018
 	 */
 	private void setForm() {
-		JLabel label = new JLabel("Alelo:");
+		JLabel label = new JLabel("Nome:");
 		label.setBounds(5, 5, 50, 20);
 		add(label);
 		
 		// Definir o campo de nome.
 		JTextField field = new JTextField(200);
 		field.setBounds(60, 5, 205, 20);
-		fields.put("allele", field);
+		fields.put("name", field);
 		add(field);
 		
 		// Definir o botão cancelar.

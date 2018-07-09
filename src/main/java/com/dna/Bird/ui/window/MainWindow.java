@@ -3,6 +3,8 @@ package com.dna.Bird.ui.window;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -104,6 +106,21 @@ public class MainWindow extends JFrame {
 	 */
 	public void setTableItems(List<Item> pItems) {
 		removeTable();
+		
+		// Ordenar os itens.
+		Collections.sort(pItems, new Comparator<Item>() {
+			public int compare(Item pItem1, Item pItem2) {
+				int result = pItem1.getSimilarity().compareTo(pItem2.getSimilarity());
+				
+				if (result == 0) {
+					result = pItem1.getName().compareToIgnoreCase(pItem2.getName());
+				}
+				else {
+					result = -result;
+				}
+				return result;
+			}
+		});
 		
 		// Definir a tabela.
 		table = new Table(

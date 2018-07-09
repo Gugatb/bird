@@ -23,10 +23,14 @@ import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
+import com.dna.Bird.constant.AlleleName;
 import com.dna.Bird.constant.Api;
 import com.dna.Bird.entity.Item;
+import com.dna.Bird.ui.window.AlleleWindow;
+import com.dna.Bird.ui.window.AllelesWindow;
 import com.dna.Bird.ui.window.BirdWindow;
 import com.dna.Bird.ui.window.MainWindow;
+import com.dna.Bird.ui.window.NameWindow;
 
 public class Menu extends JMenuBar {
 	private static final long serialVersionUID = -8486603728139625216L;
@@ -40,6 +44,9 @@ public class Menu extends JMenuBar {
 	public Menu(MainWindow pParent) {
 		JMenu dna = new JMenu("DNA");
 		dna.setMnemonic(KeyEvent.VK_D);
+		
+		JMenu search = new JMenu("Buscar");
+		search.setMnemonic(KeyEvent.VK_B);
 		
 		JMenuItem addItem = new JMenuItem("Adicionar");
 		addItem.setMnemonic(KeyEvent.VK_A);
@@ -57,18 +64,18 @@ public class Menu extends JMenuBar {
 			window.setVisible(true);
 		});
 		
+		JMenuItem cleanItem = new JMenuItem("Limpar");
+		cleanItem.setMnemonic(KeyEvent.VK_L);
+		cleanItem.setToolTipText("Limpar a busca");
+		cleanItem.addActionListener((ActionEvent event) -> {
+			setTableItems(pParent);
+		});
+		
 		JMenuItem editItem = new JMenuItem("Editar");
 		editItem.setMnemonic(KeyEvent.VK_E);
 		editItem.setToolTipText("Editar o DNA");
 		editItem.addActionListener((ActionEvent event) -> {
 			edit(pParent);
-		});
-		
-		JMenuItem removeItem = new JMenuItem("Remover");
-		removeItem.setMnemonic(KeyEvent.VK_R);
-		removeItem.setToolTipText("Remover o DNA");
-		removeItem.addActionListener((ActionEvent event) -> {
-			remove(pParent);
 		});
 		
 		JMenuItem exitItem = new JMenuItem("Sair");
@@ -78,12 +85,47 @@ public class Menu extends JMenuBar {
 			System.exit(0);
 		});
 		
+		JMenuItem removeItem = new JMenuItem("Remover");
+		removeItem.setMnemonic(KeyEvent.VK_R);
+		removeItem.setToolTipText("Remover o DNA");
+		removeItem.addActionListener((ActionEvent event) -> {
+			remove(pParent);
+		});
+		
+		JMenuItem searchByAlleleItem = new JMenuItem("Alelo");
+		searchByAlleleItem.setMnemonic(KeyEvent.VK_N);
+		searchByAlleleItem.setToolTipText("Buscar por alelo");
+		searchByAlleleItem.addActionListener((ActionEvent event) -> {
+			searchByAllele(pParent);
+		});
+		
+		JMenuItem searchByAllelesItem = new JMenuItem("Alelos");
+		searchByAllelesItem.setMnemonic(KeyEvent.VK_N);
+		searchByAllelesItem.setToolTipText("Buscar por alelos");
+		searchByAllelesItem.addActionListener((ActionEvent event) -> {
+			searchByAlleles(pParent);
+		});
+		
+		JMenuItem searchByNameItem = new JMenuItem("Nome");
+		searchByNameItem.setMnemonic(KeyEvent.VK_N);
+		searchByNameItem.setToolTipText("Buscar por nome");
+		searchByNameItem.addActionListener((ActionEvent event) -> {
+			searchByName(pParent);
+		});
+		
 		dna.add(addItem);
 		dna.add(editItem);
 		dna.add(removeItem);
 		dna.addSeparator();
 		dna.add(exitItem);
 		add(dna);
+		
+		search.add(searchByAlleleItem);
+		search.add(searchByAllelesItem);
+		search.add(searchByNameItem);
+		search.addSeparator();
+		search.add(cleanItem);
+		add(search);
 	}
 	
 	/**
@@ -119,6 +161,22 @@ public class Menu extends JMenuBar {
 		catch (IOException exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Compara os valores de mapas.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @param pMap1 o mapa
+	 * @param pMap2 o mapa
+	 * @param pName1 o nome
+	 * @param pName2 o nome
+	 * @return result o resultado
+	 */
+	private boolean compareTo(Map<String, String> pMap1, Map<String, String> pMap2, String pName1, String pName2) {
+		return pMap1.get(pName1) != null && !pMap1.get(pName1).equals("0") &&
+		pMap2.get(pName2) != null && !pMap2.get(pName2).equals("0") &&
+		pMap1.get(pName1).compareTo(pMap2.get(pName2)) == 0;
 	}
 	
 	/**
@@ -200,45 +258,12 @@ public class Menu extends JMenuBar {
 	}
 	
 	/**
-	 * Remover o DNA.
+	 * Obter os itens.
 	 * @author Gugatb
-	 * @date 08/07/2018
-	 * @param pParent o parente
+	 * @date 09/07/2018
+	 * @return items os itens
 	 */
-	public void remove(MainWindow pParent) {
-		try {
-			// Criar o arquivo, se não existir.
-			File file = new File(Api.DATA.getValue());
-			file.createNewFile();
-			
-			// Obter a linha selecionada.
-			int row = pParent.getTable().getSelectedRow();
-			
-			if (row >= 0) {
-				Object object = pParent.getTable().getModel().getValueAt(row, 0);
-				String name = object.toString();
-				
-				// Remover o DNA.
-				Wini writer = new Wini(file);
-				writer.remove(name);
-				writer.store();
-				
-				// Atualizar a tabela.
-				setTableItems(pParent);
-			}
-		}
-		catch (IOException exception) {
-			exception.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Definir os itens da tabela.
-	 * @author Gugatb
-	 * @date 07/07/2018
-	 * @param pParent o parente
-	 */
-	public void setTableItems(MainWindow pParent) {
+	public List<Item> getItems() {
 		SimpleDateFormat formater = new SimpleDateFormat(Api.DATE_FORMAT.getValue());
 		List<Item> items = new ArrayList<Item>();
 		
@@ -257,7 +282,6 @@ public class Menu extends JMenuBar {
 				item.setMap(map);
 				items.add(item);
 			}
-			pParent.setTableItems(items);
 		}
 		catch (InvalidFileFormatException exception) {
 			exception.printStackTrace();
@@ -271,5 +295,183 @@ public class Menu extends JMenuBar {
 		catch (ParseException exception) {
 			exception.printStackTrace();
 		}
+		return items;
+	}
+	
+	/**
+	 * Remover o DNA.
+	 * @author Gugatb
+	 * @date 08/07/2018
+	 * @param pParent o parente
+	 */
+	public void remove(MainWindow pParent) {
+		try {
+			// Criar o arquivo, se não existir.
+			File file = new File(Api.DATA.getValue());
+			file.createNewFile();
+			
+			// Obter as linhas selecionadas.
+			int[] rows = pParent.getTable().getSelectedRows();
+			
+			if (rows.length > 0) {
+				Wini writer = new Wini(file);
+				
+				// Remover as linhas selecionadas.
+				for (int row : rows) {
+					Object object = pParent.getTable().getModel().getValueAt(row, 0);
+					String name = object.toString();
+					writer.remove(name);
+					writer.store();
+				}
+				
+				// Atualizar a tabela.
+				setTableItems(pParent);
+			}
+		}
+		catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Buscar por alelo.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @param pParent o parente
+	 */
+	public void searchByAllele(MainWindow pParent) {
+		List<Item> match = new ArrayList<Item>();
+		List<Item> items = getItems();
+		
+		if (items.size() > 0) {
+			final AlleleWindow window = new AlleleWindow("Buscar por alelo");
+			window.setButton(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String allele = window.getField("allele").getText();
+					
+					// Buscar os itens.
+					for (Item item : items) {
+						for (String value : item.getMap().values()) {
+							if (allele != null && value != null &&
+								allele.compareTo(value) == 0) {
+								item.setSimilarity(item.getSimilarity() + 1);
+							}
+						}
+						
+						if (item.getSimilarity() > 0) {
+							match.add(item);
+						}
+					}
+					
+					// Definir os itens da tabela.
+					pParent.setTableItems(match);
+					window.dispose();
+				}
+			}, "Buscar");
+			
+			// Exibir a janela.
+			window.setVisible(true);
+		}
+	}
+	
+	/**
+	 * Buscar por alelos.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @param pParent o parente
+	 */
+	public void searchByAlleles(MainWindow pParent) {
+		List<Item> match = new ArrayList<Item>();
+		List<Item> items = getItems();
+		
+		if (items.size() > 0) {
+			final AllelesWindow window = new AllelesWindow("Buscar por alelos");
+			window.setButton(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Item entity = window.getItem();
+					
+					// Buscar os itens.
+					for (Item item : items) {
+						for (AlleleName alleleName : AlleleName.values()) {
+							String name = alleleName.getValue();
+							Map<String, String> map1 = entity.getMap();
+							Map<String, String> map2 = item.getMap();
+							
+							if (compareTo(map1, map2, name + "L", name + "L")) {
+								item.setSimilarity(item.getSimilarity() + 1);
+							}
+							if (compareTo(map1, map2, name + "L", name + "R")) {
+								item.setSimilarity(item.getSimilarity() + 1);
+							}
+							if (compareTo(map1, map2, name + "R", name + "R")) {
+								item.setSimilarity(item.getSimilarity() + 1);
+							}
+							if (compareTo(map1, map2, name + "R", name + "L")) {
+								item.setSimilarity(item.getSimilarity() + 1);
+							}
+						}
+						
+						if (item.getSimilarity() > 0) {
+							match.add(item);
+						}
+					}
+					
+					// Definir os itens da tabela.
+					pParent.setTableItems(match);
+					window.dispose();
+				}
+			}, "Buscar");
+			
+			// Exibir a janela.
+			window.setVisible(true);
+		}
+	}
+	
+	/**
+	 * Buscar por nome.
+	 * @author Gugatb
+	 * @date 09/07/2018
+	 * @param pParent o parente
+	 */
+	public void searchByName(MainWindow pParent) {
+		List<Item> match = new ArrayList<Item>();
+		List<Item> items = getItems();
+		
+		if (items.size() > 0) {
+			final NameWindow window = new NameWindow("Buscar por nome");
+			window.setButton(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String name = window.getField("name").getText();
+					
+					// Buscar os itens.
+					for (Item item : items) {
+						if (name != null && item.getName().toUpperCase().contains(name.toUpperCase())) {
+							match.add(item);
+						}
+					}
+					
+					// Definir os itens da tabela.
+					pParent.setTableItems(match);
+					window.dispose();
+				}
+			}, "Buscar");
+			
+			// Exibir a janela.
+			window.setVisible(true);
+		}
+	}
+	
+	/**
+	 * Definir os itens da tabela.
+	 * @author Gugatb
+	 * @date 07/07/2018
+	 * @param pParent o parente
+	 */
+	public void setTableItems(MainWindow pParent) {
+		List<Item> items = getItems();
+		pParent.setTableItems(items);
 	}
 }
